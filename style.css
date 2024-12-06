@@ -1,0 +1,43 @@
+:root{
+    --card-width: 157px;
+    --card-height:220px;
+}
+
+.carta-container {
+margin-top: 30px;
+position: relative;
+}
+
+.carta{
+    position: absolute;
+    height: var(--card-height);
+    width: var(--card-width);
+    perspective: 1000px;
+    cursor: pointer;
+}
+.carta-dentro{
+   position: relative;
+   width: 100%;
+   height: 100%;
+   text-align: center;
+   transition: transform 0.5s;
+   transform-style: preserve-3d;
+}
+
+.carta-frente, .carta-verso{
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   --webkit-backface-visibility: hidden;
+   backface-visibility: hidden;
+}
+
+.carta-img{
+height: 100%;
+}
+.carta-verso{
+    transform: rotateY(180deg);
+}
+.carta:hover .carta-dentro{
+    transform: rotateY(180deg); 
+}
