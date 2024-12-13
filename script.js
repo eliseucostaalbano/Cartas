@@ -5,90 +5,119 @@ const objetosCartasDefinição = [
     { id: 4, ImagePath: "Imagens/card-AceSpades.png" }
 ]
 
-const cardBackImgPath = "Imagens/card-back-Blue.png"
+const cartaVersoImgPath = "Imagens/card-back-Blue.png"
 
 const cartaContainerElem = document.querySelector('carta-container')
 
-{/* <div class="carta">
-                <div class="carta-dentro">
-                    <div class="carta-frente">
-                        <img src="Imagens/card-JackClubs.png" alt="" class="carta-img">
-                    </div>
-                    <div class="carta-verso">
-                        <img src="Imagens/card-back-Blue.png" alt="" class="carta-img">
-                    </div>
-                </div>
-            </div>  */}
+criarCartas()
 
-function criarCarta(cartaItem) {
-    // criar o elemento div que faz a carta
-    const cartaElem = criarElemento('div')
-    const cartaDentroElem = criarElemento('div')
-    const cartaFrenteElem = criarElemento('div')
-    const cartaVersoElem = criarElemento('div')
+function criarCartas() {
+    objetosCartasDefinição.forEach(cartaItem => {
+        criarCarta(cartaItem)
+    });
+}
+            
+function criarCarta(cartaItem){
 
-    // criar as imagens frente e verso das cartas
-    const cartaFrenteImg = criarElemento('img')
-    const cartaVersoImg = criarElemento('img')
+    //criar elementos div que fazem a carta 
+    const cartaElem = createElement('div')
+    const cartaDentroElem = createElement('div')
+    const cartaFrenteElem = createElement('div')
+    const cartaVersoElem = createElement('div')
 
-    // adicionar class e id para o elemento carta
-    addClassParaElemento(cartaElem, 'carta')
-    addIdParaElemento(cartaElem, cartaItem.id)
+    //criar as imagens de frente e verso da carta
+    const cartaFrenteImg = createElement('img')
+    const cartaVersoImg = createElement('img')
 
-    // adicionar class para o elemento cartaDentro
-    addClassParaElemento(cartaDentroElem, 'carta-dentro')
+    //adiciona class e id para o elemento carta
+    addClassToElement(cartaElem, 'carta')
+    addIdToElement(cartaElem, cartaItem.id)
 
-    // adicionar class para o elemento cartaFrente
-    addClassParaElemento(cartaFrenteElem, 'carta-frente')
-
-    // adicionar class  para o elemento cartaVerso
-    addClassParaElemento(cartaVersoElem, 'carta-verso')
-
-    // adicionar atributo src e valor apropriado para o elemento - carta-frente
-    addSrcParaImageElemento(cartaVersoElem, cardBackImgPath)
-
-    // adicionar atributo src e valor apropriado para o elemento - carta-verso
-    addSrcParaImageElemento(cartaFrenteElem, cartaItem.ImagePath)
-
-    // coloca class carta-img para a frente da carta 
-    addClassParaElemento(cartaFrenteElem, "carta-img")
-
-    // coloca class carta-img para a frente da carta 
-    addClassParaElemento(cartaVersoElem, "carta-img")
-
-    //adiciona o elemento da imagem da frente como um child element para o elemento carta frente
-    addChildElemento(cartaFrenteElem, cartaFrenteImg)
-
-    //adiciona o elemento da imagem de tras como um child element para o elemento carta verso
-    addChildElemento(cartaVersoElem, cartaVersoImg)
-
-    //adiciona o elemento da imagem da frente como um child element para o elemento carta dentro
-    addChildElemento(cartaDentroElem, cartaFrenteElem)
-
-    //adiciona o elemento da imagem de tras como um child element para o elemento carta dentro
-    addChildElemento(cartaDentroElem, cartaVersoElem)
-
-    //adiciona o elemento carta dentro como um child element do elemene carta
-    addChildElemento(cartaElem, cartaDentroElem)
+    //adiciona class para a parte de dentro do elemento carta
+    addClassToElement(cartaDentroElem, 'carta-dentro')
     
+    //adiciona class para o elemento carta-frente 
+    addClassToElement(cartaFrenteElem, 'carta-frente')
+
+    //adiciona class para o elemento carta-verso
+    addClassToElement(cartaVersoElem, 'carta-verso')
+
+    //adiciona src attribute e valor apropriado para o elemento img  - verso da carta
+    addSrcToImageElem(cartaVersoImg, cartaVersoImgPath)
+
+    //adiciona src attribute e valor apropriado para o elemento img  - frente da carta
+    addSrcToImageElem(cartaFrenteImg, cartaItem.ImagePath)
+
+    //assimila class para elemento image do verso da carta
+    addClassToElement(cartaVersoImg, 'carta-img')
+   
+    //assimila class para elemento image do verso da carta
+    addClassToElement(cartaFrenteImg, 'carta-img')
+
+    //adiciona o elemento frente image como child element do elemento frente-carta
+    addChildElement(cartaFrenteElem, cartaFrenteImg)
+
+    //adiciona o elemento verso image como child element do elemento verso-carta
+    addChildElement(cartaVersoElem, cartaVersoImg)
+
+    //adiciona o elemento dentro image como child element do elemento carta-dentro
+    addChildElement(cartaDentroElem, cartaFrenteElem)
+
+    //adiciona o elemento carta-verso elemento como child element do dentro-carta
+    addChildElement(cartaDentroElem, cartaVersoElem)
+
+    //adiciona o elemento carta-detro elemento como child element para o elemento carta
+    addChildElement(cartaElem, cartaDentroElem)
+
+    //adiciona o elemento carta como child element na posição apropriada do grid 
+    addCardToGridCell(cartaElem)
+
 }
 
-function criarElemento(elemType) {
+function createElement(elemType){
     return document.createElement(elemType)
-}
 
-function addClassParaElemento(elem, className) {
+}
+function addClassToElement(elem, className){
     elem.classList.add(className)
 }
-
-function addIdParaElemento(elem, id) {
+function addIdToElement(elem, id){
     elem.id = id
 }
-
-function addSrcParaImageElemento(imgElem, src) {
+function addSrcToImageElem(imgElem, src){
     imgElem.src = src
 }
 
-function addChildElemento(parentElem, childElem) {
+function addChildElement(parentElem, childElem){
     parentElem.appendChild(childElem)
+}
+
+
+function addCardToGridCell(carta)
+{
+    const cartaPositionClassName = mapCardIdToGridCell(carta)
+
+    const cartaPosElem = document.querySelector(cartaPositionClassName)
+
+    addChildElement(cartaPosElem, carta)
+
+}
+function mapCardIdToGridCell(carta){
+   
+    if(carta.id == 1)
+    {
+        return '.carta-pos-a'
+    }
+    else if(carta.id == 2)
+    {
+        return '.carta-pos-b'
+    }
+    else if(carta.id == 3)
+    {
+        return '.carta-pos-c'
+    }
+    else if(carta.id == 4)
+    {
+        return '.carta-pos-d'
+    }
 }

@@ -1,8 +1,8 @@
 :root{
     --card-width: 157px;
-    --card-height:220px;
+    --card-height:170px;
     --num-cards:4;
-    --card-horizontal-space:100px;
+    --card-horizontal-space:160px;
 }
 body{
     height: 100vh;
@@ -52,6 +52,12 @@ border: 1px solid black;
     grid-area: d;
     border: 1px solid black;
     background-color:  black;
+  }
+
+  .carta-pos-a,.carta-pos-b,.carta-pos-c,.carta-pos-d{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
 .carta{
