@@ -11,6 +11,11 @@ let cartas = []
 
 const jogarJogoButtonElem = document.getElementById('jogarJogo')
 
+const cartaContainerElem = document.querySelector('.carta-container')
+
+const collapsedGridAreaTemplate = '"a a" "a a"'
+const colecaoCartasCellClass = ".carta-pos-a"
+
 carregarJogo()
 
 function carregarJogo() {
@@ -30,10 +35,30 @@ function inicializarNovoJogo() {
 
 function começarRodada() {
     inicializarNovaRodada()
+    coletarCartas()
 }
 
 function inicializarNovaRodada() {
     
+}
+
+function coletarCartas() {
+    transformGridArea(collapsedGridAreaTemplate)
+    addCardsToGridAreaCell(colecaoCartasCellClass)
+}
+
+function transformGridArea(areas) {
+    cartaContainerElem.style.gridTemplateAreas = areas
+}
+
+function addCardsToGridAreaCell(cellPositionClassName)
+{
+    const cellPositionElem = document.querySelector(cellPositionClassName)
+
+    cartas.forEach((carta, index) =>{
+        addChildElement(cellPositionElem, carta)
+    })
+
 }
 
 function criarCartas() {
