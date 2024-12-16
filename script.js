@@ -7,17 +7,42 @@ const objetosCartasDefinição = [
 
 const cartaVersoImgPath = "Imagens/card-back-Blue.png"
 
-const cartaContainerElem = document.querySelector('carta-container')
+let cartas = []
 
-criarCartas()
+const jogarJogoButtonElem = document.getElementById('jogarJogo')
+
+carregarJogo()
+
+function carregarJogo() {
+    criarCartas()
+    cartas = document.querySelectorAll('.carta')
+    jogarJogoButtonElem.addEventListener('click', () => começarJogo())
+}
+
+function começarJogo() {
+    inicializarNovoJogo()
+    começarRodada()
+}
+
+function inicializarNovoJogo() {
+    
+}
+
+function começarRodada() {
+    inicializarNovaRodada()
+}
+
+function inicializarNovaRodada() {
+    
+}
 
 function criarCartas() {
     objetosCartasDefinição.forEach(cartaItem => {
         criarCarta(cartaItem)
     });
 }
-            
-function criarCarta(cartaItem){
+
+function criarCarta(cartaItem) {
 
     //criar elementos div que fazem a carta 
     const cartaElem = createElement('div')
@@ -35,7 +60,7 @@ function criarCarta(cartaItem){
 
     //adiciona class para a parte de dentro do elemento carta
     addClassToElement(cartaDentroElem, 'carta-dentro')
-    
+
     //adiciona class para o elemento carta-frente 
     addClassToElement(cartaFrenteElem, 'carta-frente')
 
@@ -50,7 +75,7 @@ function criarCarta(cartaItem){
 
     //assimila class para elemento image do verso da carta
     addClassToElement(cartaVersoImg, 'carta-img')
-   
+
     //assimila class para elemento image do verso da carta
     addClassToElement(cartaFrenteImg, 'carta-img')
 
@@ -74,27 +99,26 @@ function criarCarta(cartaItem){
 
 }
 
-function createElement(elemType){
+function createElement(elemType) {
     return document.createElement(elemType)
 
 }
-function addClassToElement(elem, className){
+function addClassToElement(elem, className) {
     elem.classList.add(className)
 }
-function addIdToElement(elem, id){
+function addIdToElement(elem, id) {
     elem.id = id
 }
-function addSrcToImageElem(imgElem, src){
+function addSrcToImageElem(imgElem, src) {
     imgElem.src = src
 }
 
-function addChildElement(parentElem, childElem){
+function addChildElement(parentElem, childElem) {
     parentElem.appendChild(childElem)
 }
 
 
-function addCardToGridCell(carta)
-{
+function addCardToGridCell(carta) {
     const cartaPositionClassName = mapCardIdToGridCell(carta)
 
     const cartaPosElem = document.querySelector(cartaPositionClassName)
@@ -102,22 +126,18 @@ function addCardToGridCell(carta)
     addChildElement(cartaPosElem, carta)
 
 }
-function mapCardIdToGridCell(carta){
-   
-    if(carta.id == 1)
-    {
+function mapCardIdToGridCell(carta) {
+
+    if (carta.id == 1) {
         return '.carta-pos-a'
     }
-    else if(carta.id == 2)
-    {
+    else if (carta.id == 2) {
         return '.carta-pos-b'
     }
-    else if(carta.id == 3)
-    {
+    else if (carta.id == 3) {
         return '.carta-pos-c'
     }
-    else if(carta.id == 4)
-    {
+    else if (carta.id == 4) {
         return '.carta-pos-d'
     }
 }
