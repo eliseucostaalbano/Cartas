@@ -16,6 +16,10 @@ const cartaContainerElem = document.querySelector('.carta-container')
 const collapsedGridAreaTemplate = '"a a" "a a"'
 const colecaoCartasCellClass = ".carta-pos-a"
 
+const numCartas = objetosCartasDefinição.length
+
+let posicoesCartas = []
+
 carregarJogo()
 
 function carregarJogo() {
@@ -37,6 +41,7 @@ function começarRodada() {
     inicializarNovaRodada()
     coletarCartas()
     fliparCartas(true)
+    embaralharCartas()
 }
 
 function inicializarNovaRodada() {
@@ -76,6 +81,89 @@ function fliparCartas(fliparParaTras) {
         setTimeout(() => {
             fliparCarta(carta, fliparParaTras)
         }, index * 100)
+    })
+}
+
+function embaralharCartas() {
+    const id = setInterval(embaralhar, 12)
+    let contagemEmbaralhar = 0
+    
+    function embaralhar() {
+        randomizeCardPositions()
+        if (contagemEmbaralhar === 500) {
+            clearInterval(id)
+            lidarCartas()
+        } else {
+            contagemEmbaralhar ++
+        }
+    }
+
+}
+
+function randomizeCardPositions()
+{
+    const random1 = Math.floor(Math.random() * numCartas) + 1
+    const random2 = Math.floor(Math.random() * numCartas) + 1
+
+    const temp = posicoesCartas[random1 - 1]
+
+    posicoesCartas[random1 - 1] = posicoesCartas[random2 - 1]
+    posicoesCartas[random2 - 1] = temp
+
+}
+
+
+function lidarCartas() {
+    addCardsToAppropiateGridCell()
+
+    const areasTemplate = returnGridAreasMappedToCardPos()
+
+    transformGridArea(areasTemplate)
+}
+
+function returnGridAreasMappedToCardPos()
+{
+    let parteUm = ""
+    let parteDois =""
+    let areas = ""
+
+    cartas.forEach((carta, index) => {
+        if(posicoesCartas[index] == 1)
+        {
+            areas = areas + "a "
+        }
+        else if(posicoesCartas[index] == 2)
+        {
+            areas = areas + "b "
+        }
+        else if (posicoesCartas[index] == 3)
+        {
+            areas = areas + "c "
+        }
+        else if (posicoesCartas[index] == 4)
+        {
+            areas = areas + "d "
+        }
+        if (index == 1)
+        {
+            parteUm = areas.substring(0, areas.length - 1)
+            areas = "";
+        }
+        else if (index == 3)
+        {
+            parteDois = areas.substring(0, areas.length - 1)
+        }
+
+    })
+
+    return `"${parteUm}" "${parteDois}"`
+
+
+}
+
+function addCardsToAppropiateGridCell() {
+    cartas.forEach((carta) => {
+      addCardToGridCell(carta)
     })
 }
 
@@ -140,6 +228,12 @@ function criarCarta(cartaItem) {
     //adiciona o elemento carta como child element na posição apropriada do grid 
     addCardToGridCell(cartaElem)
 
+    initializeCardPositions(cartaElem)
+
+}
+
+function initializeCardPositions(carta) {
+   posicoesCartas.push(carta.id)
 }
 
 function createElement(elemType) {
