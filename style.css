@@ -90,6 +90,7 @@ height: 100%;
 .carta-verso{
     transform: rotateY(180deg);
 }
-.carta:hover .carta-dentro{
-    transform: rotateY(180deg); 
+
+.carta-dentro.flipar{
+  transform: rotateY(180deg); 
 }

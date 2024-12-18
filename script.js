@@ -36,6 +36,7 @@ function inicializarNovoJogo() {
 function começarRodada() {
     inicializarNovaRodada()
     coletarCartas()
+    fliparCartas(true)
 }
 
 function inicializarNovaRodada() {
@@ -59,6 +60,23 @@ function addCardsToGridAreaCell(cellPositionClassName)
         addChildElement(cellPositionElem, carta)
     })
 
+}
+function fliparCarta(carta, fliparParaTras) {
+     const dentroCartaElem = carta.firstChild
+
+     if (fliparParaTras && !dentroCartaElem.classList.contains('flipar')) {
+        dentroCartaElem.classList.add('flipar')
+     } else if(dentroCartaElem.classList.contains('flipar')){
+        dentroCartaElem.classList.remove('flipar')
+     }
+}
+
+function fliparCartas(fliparParaTras) {
+    cartas.forEach((carta, index) =>  {
+        setTimeout(() => {
+            fliparCarta(carta, fliparParaTras)
+        }, index * 100)
+    })
 }
 
 function criarCartas() {
