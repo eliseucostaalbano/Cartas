@@ -5,6 +5,8 @@ const objetosCartasDefinição = [
     { id: 4, ImagePath: "Imagens/card-AceSpades.png" }
 ]
 
+const aceId = 4
+
 const cartaVersoImgPath = "Imagens/card-back-Blue.png"
 
 let cartas = []
@@ -20,7 +22,39 @@ const numCartas = objetosCartasDefinição.length
 
 let posicoesCartas = []
 
+let jogoEmProgresso = false 
+let misturamentoEmProgesso= false 
+let cartasReveladas = false
+
 carregarJogo()
+
+function escolherCarta() {
+    if(podeEscolherCarta()){
+
+    }
+}
+
+function outputChoicheFeedBack(hit) {
+    if (hit) {
+       updateStatusElement(atualGameStatusElem, "block", corGanhou, "Acertou - Parabéns") 
+    } else {
+        updateStatusElement(atualGameStatusElem, "block", corPerdeu, "Errou - Que pena") 
+    }
+}
+
+function avaliarEscolhaCarta(carta) {
+    if (carta.id == aceId) {
+        updatePlacar()
+        outputChoicheFeedBack(true)
+    } else {
+        outputChoicheFeedBack(false)
+    }
+}
+
+function podeEscolherCarta() {
+    return jogoEmProgresso == true && !misturamentoEmProgesso && !cartasReveladas
+}
+
 
 function carregarJogo() {
     criarCartas()
