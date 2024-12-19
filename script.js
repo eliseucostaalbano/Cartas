@@ -26,11 +26,62 @@ let jogoEmProgresso = false
 let misturamentoEmProgesso= false 
 let cartasReveladas = false
 
+ const atualGameStatusElem = document.querySelector('.status-atual')
+ const placarContainerElem = document.querySelector('.header-placar-container')
+ const placarElem = document.querySelector('.placar')
+ const rodadaContainerElem = document.querySelector('.header-rodada-container')
+ const rodadaElem = document.querySelector('.rodada')
+
+ const corGanhou = "green"
+ const corPerdeu = "red"
+ const corPrincipal = "black"
+
+let rodadaNum = 0
+let maxRodadas = 4
+let placar = 0
+
 carregarJogo()
 
-function escolherCarta() {
+function escolherCarta(carta) {
     if(podeEscolherCarta()){
+       avaliarEscolhaCarta(carta)
+       fliparCarta(carta, false)
 
+       setTimeout(() =>{
+        fliparCartas(false)
+        updateStatusElement(atualGameStatusElem, "block", corPrincipal, "Posição Das Cartas Reveladas")
+       }, 3000)
+       cartasReveladas = true
+    }
+}
+
+function calcularPlacarParaAdd(rodadaNum) {
+    if (rodadaNum == 1) {
+        return 100
+    } else if(rodadaNum == 2){
+        return 50
+    }else if(rodadaNum == 3){
+        return 25
+    }else {
+        return 10
+    }
+}
+
+function calcularPlacar() {
+    const placarParaAdd = calcularPlacarParaAdd(rodadaNum)
+    placar = placar + placarParaAdd
+}
+
+function updatePlacar() {
+    calcularPlacar()
+}
+
+function updateStatusElement(elem, display, cor, innerHTML) {
+    elem.style.display = display
+
+    if (arguments.length > 2) {
+        elem.style.color = cor
+        elem.innerHTML = innerHTML
     }
 }
 
@@ -68,7 +119,15 @@ function começarJogo() {
 }
 
 function inicializarNovoJogo() {
-    
+    placar = 0
+    rodadaNum = 0
+
+    misturamentoEmProgesso = false
+    updateStatusElement(placarContainerElem, "flex")
+    updateStatusElement(rodadaContainerElem, "flex")
+
+    updateStatusElement(placarElem, "block", corPrincipal, `Placar <span class='badge'>${placar}</span>`)
+    updateStatusElement(rodadaElem, "block", corPrincipal, `Rodada <span class='badge'>${rodadaNum}</span>`)
 }
 
 function começarRodada() {
@@ -79,7 +138,15 @@ function começarRodada() {
 }
 
 function inicializarNovaRodada() {
+    rodadaNum++
+    jogarJogoButtonElem.disabled = true
     
+    jogoEmProgresso = true
+    misturamentoEmProgesso = true
+    cartasReveladas = false
+
+    updateStatusElement(atualGameStatusElem, "block", corPrincipal, "Embaralhando...")
+    updateStatusElement(rodadaElem, "block", corPrincipal, `Placar <span class='badge'>${rodadaNum}</span>`)
 }
 
 function coletarCartas() {
@@ -264,6 +331,12 @@ function criarCarta(cartaItem) {
 
     initializeCardPositions(cartaElem)
 
+    attatchClickEventHandlerToCard(cartaElem)
+
+}
+
+function attatchClickEventHandlerToCard(carta){
+    carta.addEventListener('click', () => escolherCarta(carta))
 }
 
 function initializeCardPositions(carta) {
@@ -287,7 +360,6 @@ function addSrcToImageElem(imgElem, src) {
 function addChildElement(parentElem, childElem) {
     parentElem.appendChild(childElem)
 }
-
 
 function addCardToGridCell(carta) {
     const cartaPositionClassName = mapCardIdToGridCell(carta)
