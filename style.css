@@ -8,6 +8,43 @@ body{
     height: 100vh;
 }
 
+header{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.header-titulo-container{
+  display: flex;
+  justify-content: center;
+}
+
+.header-round-info-container{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.header-status-info-container,
+.header-butao-container, 
+.header-placar-container,
+.header-rodada-container,
+.header-img-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-placar-container,
+.header-rodada-container,
+.header-img-container{
+ width: 150px;
+}
+.header-img{
+  height: 75px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
 main{
     height: 55%;
     display: flex;
