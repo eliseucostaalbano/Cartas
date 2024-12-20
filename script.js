@@ -22,19 +22,19 @@ const numCartas = objetosCartasDefinição.length
 
 let posicoesCartas = []
 
-let jogoEmProgresso = false 
-let misturamentoEmProgesso= false 
+let jogoEmProgresso = false
+let misturamentoEmProgesso = false
 let cartasReveladas = false
 
- const atualGameStatusElem = document.querySelector('.status-atual')
- const placarContainerElem = document.querySelector('.header-placar-container')
- const placarElem = document.querySelector('.placar')
- const rodadaContainerElem = document.querySelector('.header-rodada-container')
- const rodadaElem = document.querySelector('.rodada')
+const atualGameStatusElem = document.querySelector('.status-atual')
+const placarContainerElem = document.querySelector('.header-placar-container')
+const placarElem = document.querySelector('.placar')
+const rodadaContainerElem = document.querySelector('.header-rodada-container')
+const rodadaElem = document.querySelector('.rodada')
 
- const corGanhou = "green"
- const corPerdeu = "red"
- const corPrincipal = "black"
+const corGanhou = "green"
+const corPerdeu = "red"
+const corPrincipal = "black"
 
 let rodadaNum = 0
 let maxRodadas = 4
@@ -42,27 +42,51 @@ let placar = 0
 
 carregarJogo()
 
-function escolherCarta(carta) {
-    if(podeEscolherCarta()){
-       avaliarEscolhaCarta(carta)
-       fliparCarta(carta, false)
+function gameOver() {
+    updateStatusElement(placarContainerElem, "none")
+    updateStatusElement(rodadaContainerElem, "none")
 
-       setTimeout(() =>{
-        fliparCartas(false)
-        updateStatusElement(atualGameStatusElem, "block", corPrincipal, "Posição Das Cartas Reveladas")
-       }, 3000)
-       cartasReveladas = true
+    const mensagemFimDeJogo = `Fim De Jogo! Você fez <span class = 'badge'>${placar}</span> Pontos. Clique no Botão 'Começar Jogo' para Jogar novamente`
+    updateStatusElement(atualGameStatusElem, "block", corPrincipal, mensagemFimDeJogo)
+
+    jogoEmProgresso = false
+    jogarJogoButtonElem.disabled = false
+
+}
+
+function finalizarRodada() {
+    setTimeout(() => {
+        if (rodadaNum == maxRodadas) {
+            gameOver()
+            return
+        } else {
+            começarRodada()
+        }
+    }, 3000)
+}
+
+function escolherCarta(carta) {
+    if (podeEscolherCarta()) {
+        avaliarEscolhaCarta(carta)
+        fliparCarta(carta, false)
+
+        setTimeout(() => {
+            fliparCartas(false)
+            updateStatusElement(atualGameStatusElem, "block", corPrincipal, "Posição Das Cartas Reveladas")
+            finalizarRodada()
+        }, 3000)
+        cartasReveladas = true
     }
 }
 
 function calcularPlacarParaAdd(rodadaNum) {
     if (rodadaNum == 1) {
         return 100
-    } else if(rodadaNum == 2){
+    } else if (rodadaNum == 2) {
         return 50
-    }else if(rodadaNum == 3){
+    } else if (rodadaNum == 3) {
         return 25
-    }else {
+    } else {
         return 10
     }
 }
@@ -74,6 +98,7 @@ function calcularPlacar() {
 
 function updatePlacar() {
     calcularPlacar()
+    updateStatusElement(placarElem, "block", corPrincipal, `Placar <span class = 'badge'>${placar}</span>`)
 }
 
 function updateStatusElement(elem, display, cor, innerHTML) {
@@ -87,9 +112,9 @@ function updateStatusElement(elem, display, cor, innerHTML) {
 
 function outputChoicheFeedBack(hit) {
     if (hit) {
-       updateStatusElement(atualGameStatusElem, "block", corGanhou, "Acertou - Parabéns") 
+        updateStatusElement(atualGameStatusElem, "block", corGanhou, "Acertou - Parabéns")
     } else {
-        updateStatusElement(atualGameStatusElem, "block", corPerdeu, "Errou - Que pena") 
+        updateStatusElement(atualGameStatusElem, "block", corPerdeu, "Errou - Que pena")
     }
 }
 
@@ -111,6 +136,9 @@ function carregarJogo() {
     criarCartas()
     cartas = document.querySelectorAll('.carta')
     jogarJogoButtonElem.addEventListener('click', () => começarJogo())
+
+    updateStatusElement(placarContainerElem, "none")
+    updateStatusElement(rodadaContainerElem, "none")
 }
 
 function começarJogo() {
@@ -140,13 +168,13 @@ function começarRodada() {
 function inicializarNovaRodada() {
     rodadaNum++
     jogarJogoButtonElem.disabled = true
-    
+
     jogoEmProgresso = true
     misturamentoEmProgesso = true
     cartasReveladas = false
 
     updateStatusElement(atualGameStatusElem, "block", corPrincipal, "Embaralhando...")
-    updateStatusElement(rodadaElem, "block", corPrincipal, `Placar <span class='badge'>${rodadaNum}</span>`)
+    updateStatusElement(rodadaElem, "block", corPrincipal, `Rodada <span class='badge'>${rodadaNum}</span>`)
 }
 
 function coletarCartas() {
@@ -158,27 +186,26 @@ function transformGridArea(areas) {
     cartaContainerElem.style.gridTemplateAreas = areas
 }
 
-function addCardsToGridAreaCell(cellPositionClassName)
-{
+function addCardsToGridAreaCell(cellPositionClassName) {
     const cellPositionElem = document.querySelector(cellPositionClassName)
 
-    cartas.forEach((carta, index) =>{
+    cartas.forEach((carta, index) => {
         addChildElement(cellPositionElem, carta)
     })
 
 }
 function fliparCarta(carta, fliparParaTras) {
-     const dentroCartaElem = carta.firstChild
+    const dentroCartaElem = carta.firstChild
 
-     if (fliparParaTras && !dentroCartaElem.classList.contains('flipar')) {
+    if (fliparParaTras && !dentroCartaElem.classList.contains('flipar')) {
         dentroCartaElem.classList.add('flipar')
-     } else if(dentroCartaElem.classList.contains('flipar')){
+    } else if (dentroCartaElem.classList.contains('flipar')) {
         dentroCartaElem.classList.remove('flipar')
-     }
+    }
 }
 
 function fliparCartas(fliparParaTras) {
-    cartas.forEach((carta, index) =>  {
+    cartas.forEach((carta, index) => {
         setTimeout(() => {
             fliparCarta(carta, fliparParaTras)
         }, index * 100)
@@ -188,21 +215,22 @@ function fliparCartas(fliparParaTras) {
 function embaralharCartas() {
     const id = setInterval(embaralhar, 12)
     let contagemEmbaralhar = 0
-    
+
     function embaralhar() {
         randomizeCardPositions()
         if (contagemEmbaralhar === 500) {
             clearInterval(id)
+            misturamentoEmProgesso = false
             lidarCartas()
+            updateStatusElement(atualGameStatusElem, "block", corPrincipal, "Escolha a carta que você acha ser o As de Espadas")
         } else {
-            contagemEmbaralhar ++
+            contagemEmbaralhar++
         }
     }
 
 }
 
-function randomizeCardPositions()
-{
+function randomizeCardPositions() {
     const random1 = Math.floor(Math.random() * numCartas) + 1
     const random2 = Math.floor(Math.random() * numCartas) + 1
 
@@ -222,36 +250,29 @@ function lidarCartas() {
     transformGridArea(areasTemplate)
 }
 
-function returnGridAreasMappedToCardPos()
-{
+function returnGridAreasMappedToCardPos() {
     let parteUm = ""
-    let parteDois =""
+    let parteDois = ""
     let areas = ""
 
     cartas.forEach((carta, index) => {
-        if(posicoesCartas[index] == 1)
-        {
+        if (posicoesCartas[index] == 1) {
             areas = areas + "a "
         }
-        else if(posicoesCartas[index] == 2)
-        {
+        else if (posicoesCartas[index] == 2) {
             areas = areas + "b "
         }
-        else if (posicoesCartas[index] == 3)
-        {
+        else if (posicoesCartas[index] == 3) {
             areas = areas + "c "
         }
-        else if (posicoesCartas[index] == 4)
-        {
+        else if (posicoesCartas[index] == 4) {
             areas = areas + "d "
         }
-        if (index == 1)
-        {
+        if (index == 1) {
             parteUm = areas.substring(0, areas.length - 1)
             areas = "";
         }
-        else if (index == 3)
-        {
+        else if (index == 3) {
             parteDois = areas.substring(0, areas.length - 1)
         }
 
@@ -264,7 +285,7 @@ function returnGridAreasMappedToCardPos()
 
 function addCardsToAppropiateGridCell() {
     cartas.forEach((carta) => {
-      addCardToGridCell(carta)
+        addCardToGridCell(carta)
     })
 }
 
@@ -335,12 +356,12 @@ function criarCarta(cartaItem) {
 
 }
 
-function attatchClickEventHandlerToCard(carta){
+function attatchClickEventHandlerToCard(carta) {
     carta.addEventListener('click', () => escolherCarta(carta))
 }
 
 function initializeCardPositions(carta) {
-   posicoesCartas.push(carta.id)
+    posicoesCartas.push(carta.id)
 }
 
 function createElement(elemType) {
