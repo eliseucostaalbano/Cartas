@@ -98,7 +98,7 @@ function calcularPlacar() {
 
 function updatePlacar() {
     calcularPlacar()
-    updateStatusElement(placarElem, "block", corPrincipal, `Placar <span class = 'badge'>${placar}</span>`)
+    updateStatusElement(placarElem, "block", corPrincipal, `Placar: <span class = 'badge'>${placar}</span>`)
 }
 
 function updateStatusElement(elem, display, cor, innerHTML) {
@@ -154,8 +154,8 @@ function inicializarNovoJogo() {
     updateStatusElement(placarContainerElem, "flex")
     updateStatusElement(rodadaContainerElem, "flex")
 
-    updateStatusElement(placarElem, "block", corPrincipal, `Placar <span class='badge'>${placar}</span>`)
-    updateStatusElement(rodadaElem, "block", corPrincipal, `Rodada <span class='badge'>${rodadaNum}</span>`)
+    updateStatusElement(placarElem, "block", corPrincipal, `Placar: <span class='badge'>${placar}</span>`)
+    updateStatusElement(rodadaElem, "block", corPrincipal, `Rodada: <span class='badge'>${rodadaNum}</span>`)
 }
 
 function começarRodada() {
@@ -174,7 +174,7 @@ function inicializarNovaRodada() {
     cartasReveladas = false
 
     updateStatusElement(atualGameStatusElem, "block", corPrincipal, "Embaralhando...")
-    updateStatusElement(rodadaElem, "block", corPrincipal, `Rodada <span class='badge'>${rodadaNum}</span>`)
+    updateStatusElement(rodadaElem, "block", corPrincipal, `Rodada: <span class='badge'>${rodadaNum}</span>`)
 }
 
 function coletarCartas() {
