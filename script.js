@@ -131,10 +131,11 @@ function podeEscolherCarta() {
     return jogoEmProgresso == true && !misturamentoEmProgesso && !cartasReveladas
 }
 
-
 function carregarJogo() {
     criarCartas()
+
     cartas = document.querySelectorAll('.carta')
+    efeitoCartaFlyIn()
     jogarJogoButtonElem.addEventListener('click', () => começarJogo())
 
     updateStatusElement(placarContainerElem, "none")
@@ -212,15 +213,67 @@ function fliparCartas(fliparParaTras) {
     })
 }
 
+function efeitoCartaFlyIn() {
+    const id = setInterval(flyIn, 5)
+
+    let cartaContagem = 0;
+
+    let contagem = 0
+
+    function flyIn() {
+        contagem++
+        
+        if(cartaContagem == numCartas){
+         clearInterval(id)
+         jogarJogoButtonElem.style.display = "inline-flex"
+        }
+       
+        if(contagem == 1|| contagem == 250|| contagem == 500|| contagem == 750){
+             cartaContagem++
+
+             let carta = document.getElementById(cartaContagem)
+             carta.classList.remove("fly-in")
+        }
+    }
+}
+
+function removerClasseseEmbaralhamento() {
+        cartas.forEach((carta) =>{
+            carta.classList.remove("misturar-esquerda")
+            carta.classList.remove("misturar-direita")
+        })
+}
+
+function animarEmbaralhamento(contagemEmbaralhar) {
+
+    const random1 = Math.floor(Math.random() * numCartas) + 1
+    const random2 = Math.floor(Math.random() * numCartas) + 1
+
+    let carta1 = document.getElementById(random1)
+    let carta2 = document.getElementById(random2)
+
+    if (contagemEmbaralhar % 4 == 0) {
+        carta1.classList.toggle("misturar-esquerda")
+        carta1.style.zIndex = 100
+    }
+
+    if (contagemEmbaralhar % 10 == 0) {
+        carta2.classList.toggle("misturar-direita")
+        carta2.style.zIndex = 200
+    }
+}
+
 function embaralharCartas() {
     const id = setInterval(embaralhar, 12)
     let contagemEmbaralhar = 0
 
     function embaralhar() {
         randomizeCardPositions()
+        animarEmbaralhamento(contagemEmbaralhar)
         if (contagemEmbaralhar === 500) {
             clearInterval(id)
             misturamentoEmProgesso = false
+            removerClasseseEmbaralhamento()
             lidarCartas()
             updateStatusElement(atualGameStatusElem, "block", corPrincipal, "Escolha a carta que você acha ser o As de Espadas")
         } else {
@@ -240,7 +293,6 @@ function randomizeCardPositions() {
     posicoesCartas[random2 - 1] = temp
 
 }
-
 
 function lidarCartas() {
     addCardsToAppropiateGridCell()
@@ -309,6 +361,7 @@ function criarCarta(cartaItem) {
 
     //adiciona class e id para o elemento carta
     addClassToElement(cartaElem, 'carta')
+    addClassToElement(cartaElem, 'fly-in')
     addIdToElement(cartaElem, cartaItem.id)
 
     //adiciona class para a parte de dentro do elemento carta

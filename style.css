@@ -121,6 +121,7 @@ grid-template-areas: "a   b"
     width: var(--card-width);
     perspective: 1000px;
     cursor: pointer;
+    transition: transform 0.6s ease-in-out
 }
 .carta-dentro{
    position: relative;
@@ -150,7 +151,18 @@ height: 100%;
   transform: rotateY(180deg); 
 }
 
-/* CSS */
+.carta.misturar-esquerda{
+  transform: translateX(300px) translateY(40px);
+}
+
+.carta.misturar-direita{
+  transform: translateX(-350px) translateY(-40px);
+}
+
+.carta.fly-in{
+  transform: translateY(-1000px) translateX(-600px) rotate(45deg);
+}
+
 #jogarJogo{
   align-items: center;
   appearance: none;
@@ -161,7 +173,7 @@ height: 100%;
   box-sizing: border-box;
   color: #3c4043;
   cursor: pointer;
-  display: inline-flex;
+  display: none;
   fill: currentcolor;
   font-family: "Google Sans",Roboto,Arial,sans-serif;
   font-size: 14px;
@@ -183,9 +195,20 @@ height: 100%;
   width: auto;
   will-change: transform,opacity;
   z-index: 0;
+  animation: button-game-play-fade-in 10s 1;
 }
 
 #jogarJogo:hover {
   background: silver;
   color: darkblue;
+}
+
+@keyframes button-game-play-fade-in{
+  from{opacity: 0;}
+  to{opacity: 1;}
+}
+
+.button-game-play-container{
+  width:150px;
+  height:70px;
 }
