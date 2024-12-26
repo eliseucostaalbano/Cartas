@@ -1,11 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 
 :root{
-    --card-width: 157px;
-    --card-height:170px;
+    --card-width-lg: 157px;
+    --card-height-lg:220px;
+     
+    --card-width-sm: 120px;
+    --card-height-sm:168px;
+    
     --num-cards:4;
-    --card-horizontal-space:160px;
-
+    --card-horizontal-space-lg:100px;
+    --card-horizontal-space-sm: 50px;
 
     --badge-bg-color:silver;
     --primary-color:black;
@@ -81,7 +85,7 @@ main{
 .carta-container {
 position: relative;
 height: 100%;
-width: calc(var(--card-width) * (var(--num-cards)/ 2) + var(--card-horizontal-space));
+width: calc(var(--card-width-lg) * (var(--num-cards)/ 2) + var(--card-horizontal-space-lg));
 display: grid;
 grid-template-columns: 1fr 1fr;
 grid-template-rows: 1fr 1fr;
@@ -117,8 +121,8 @@ grid-template-areas: "a   b"
 
 .carta{
     position: absolute;
-    height: var(--card-height);
-    width: var(--card-width);
+    height: var(--card-height-lg);
+    width: var(--card-width-lg);
     perspective: 1000px;
     cursor: pointer;
     transition: transform 0.6s ease-in-out
@@ -211,4 +215,40 @@ height: 100%;
 .button-game-play-container{
   width:150px;
   height:70px;
+}
+
+@media screen and (max-width:600px){
+
+  .carta{
+    width: var(--card-width-sm);
+    height: var(--card-height-sm);
+  }
+
+  .carta-container{
+    width: calc(var(--card-width-sm) * (var(--num-cards)/2) + var(--card-horizontal-space-sm));
+  }
+
+  main{
+    height: 50%;
+  }
+
+  .status-atual{
+    font-size: 1.2rem;
+  }
+
+  .button-game-play-container{
+    width:120px;
+    height:40px;
+  }
+
+  #jogarJogo{
+    padding: 6px 8px;
+    font-size: 12px;
+    min-height: 40px;
+  }
+
+  .header-img{
+    height:55px;
+}
+
 }
