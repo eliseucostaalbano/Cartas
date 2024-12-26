@@ -40,6 +40,10 @@ let rodadaNum = 0
 let maxRodadas = 4
 let placar = 0
 
+let gameObj =  {}
+
+const localStorageGameKey = "HTA"
+
 carregarJogo()
 
 function gameOver() {
@@ -68,6 +72,7 @@ function finalizarRodada() {
 function escolherCarta(carta) {
     if (podeEscolherCarta()) {
         avaliarEscolhaCarta(carta)
+        saveGameObjectToLocalStorage(placar, rodadaNum)
         fliparCarta(carta, false)
 
         setTimeout(() => {
@@ -142,6 +147,23 @@ function carregarJogo() {
     updateStatusElement(rodadaContainerElem, "none")
 }
 
+function checarPorJogoIncompleto() {
+    const serializedGameObj= getLocalStorageItemValue(localStorageGameKey)
+
+    if (serializedGameObj) {
+        gameObj= getObjectFromJSON(serializedGameObj)
+    }
+
+    if (gameObj.rodada >= maxRodadas) {
+        removeLocalStorageItem(localStorageGameKey)
+    } else {
+        if (confirm('você gostaria de continuar onde parou')) {
+            placar = gameObj.placar
+            rodada = gameObj.rodada
+        }
+    }
+}
+
 function começarJogo() {
     inicializarNovoJogo()
     começarRodada()
@@ -150,6 +172,8 @@ function começarJogo() {
 function inicializarNovoJogo() {
     placar = 0
     rodadaNum = 0
+
+    checarPorJogoIncompleto()
 
     misturamentoEmProgesso = false
     updateStatusElement(placarContainerElem, "flex")
@@ -457,4 +481,37 @@ function mapCardIdToGridCell(carta) {
     else if (carta.id == 4) {
         return '.carta-pos-d'
     }
+}
+
+//local storage functions
+function getSerializedObjectAsJSON(obj)
+{
+    return JSON.stringify(obj)
+}
+function getObjectFromJSON(json)
+{
+    return JSON.parse(json)
+}
+function updateLocalStorageItem(key, value)
+{
+    localStorage.setItem(key, value)
+}
+function removeLocalStorageItem(key)
+{
+    localStorage.removeItem(key)
+}
+function getLocalStorageItemValue(key)
+{
+    return localStorage.getItem(key)
+}
+
+function updateGameObject(placar,rodada)
+{
+    gameObj.placar = placar
+    gameObj.rodada = rodada
+}
+function saveGameObjectToLocalStorage(placar,rodada)
+{
+    updateGameObject(placar, rodada)
+    updateLocalStorageItem(localStorageGameKey, getSerializedObjectAsJSON(gameObj))
 }
